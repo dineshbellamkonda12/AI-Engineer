@@ -1811,3 +1811,831 @@ Create a queue and:
 Write a function that uses a stack to check if a string is a palindrome (reads the same forwards and backwards).
 
 ***
+
+
+--------
+
+
+# TREE AND GRAPH - SUPER SIMPLE STUDY NOTES
+
+## PART A: TREE DATA STRUCTURE
+
+## Part 1: What is a Tree?
+
+A **tree** is a hierarchical data structure that looks like an upside-down tree. It consists of **nodes** connected by **edges**, where each node can have multiple children, but only one parent.
+
+**Key Rule**: Trees are hierarchical - data flows from top to bottom, like a family tree or organizational chart.
+
+### Real-World Analogies
+
+1. **Family Tree**: Grandparents at top, parents below, children at bottom
+2. **File System**: Folders containing subfolders and files
+3. **Company Organization**: CEO at top, managers below, employees at bottom
+4. **HTML DOM**: HTML structure in web pages
+
+***
+
+## Part 2: Tree Terminology (Essential Vocabulary)
+
+```
+         [A]  ← Root (topmost node, no parent)
+        /   \
+      [B]   [C]  ← Children of A
+      / \     \
+    [D] [E]   [F]  ← Leaf nodes (no children)
+```
+
+**Root**: The topmost node with no parent (A)
+
+**Parent**: A node that has children (A is parent of B and C)
+
+**Child**: A node connected below another node (B and C are children of A)
+
+**Siblings**: Nodes with the same parent (B and C are siblings)
+
+**Leaf (External Node)**: A node with no children (D, E, F)
+
+**Internal Node**: A node with at least one child (A, B, C)
+
+**Edge**: Connection between two nodes (lines connecting nodes)
+
+**Path**: Sequence of nodes connected by edges (A → B → D)
+
+**Height of Tree**: Longest path from root to any leaf (2 in the example above)
+
+**Depth of Node**: Number of edges from root to that node (B has depth 1)
+
+**Level**: All nodes at same depth (B and C are at level 1)
+
+***
+
+## Part 3: Types of Trees
+
+### Binary Tree
+Each node has **at most 2 children** (left and right).
+
+```
+      [10]
+     /    \
+   [5]    [15]
+   / \      \
+ [3] [7]   [20]
+```
+
+### Binary Search Tree (BST)
+A binary tree where:
+- Left child < Parent
+- Right child > Parent
+
+```
+       [50]
+      /    \
+   [30]    [70]
+   / \     / \
+ [20][40][60][80]
+
+Rule: 20 < 30 < 50 < 60 < 70 < 80
+```
+
+### N-ary Tree
+Each node can have **n children**.
+
+```
+        [A]
+      / | \ \
+    [B][C][D][E]
+    /\  |
+  [F][G][H]
+```
+
+***
+
+## Part 4: Simple Binary Tree in Python
+
+### Building a Basic Tree Node
+
+```python
+class TreeNode:
+    def __init__(self, data):
+        self.data = data        # The value stored in the node
+        self.left = None        # Pointer to left child
+        self.right = None       # Pointer to right child
+
+
+# Create individual nodes
+root = TreeNode(1)
+root.left = TreeNode(2)
+root.right = TreeNode(3)
+root.left.left = TreeNode(4)
+root.left.right = TreeNode(5)
+
+# Tree structure:
+#       1
+#      / \
+#     2   3
+#    / \
+#   4   5
+```
+
+***
+
+## Part 5: Tree Traversal (Visiting All Nodes)
+
+There are three main ways to traverse a binary tree:
+
+### 1. In-Order Traversal (Left → Root → Right)
+
+```python
+def inorder(node):
+    if node:
+        inorder(node.left)       # Visit left subtree
+        print(node.data, end=' ') # Visit root
+        inorder(node.right)      # Visit right subtree
+
+# Example tree:
+#       1
+#      / \
+#     2   3
+#    / \
+#   4   5
+
+# Output: 4 2 5 1 3
+```
+
+### 2. Pre-Order Traversal (Root → Left → Right)
+
+```python
+def preorder(node):
+    if node:
+        print(node.data, end=' ') # Visit root
+        preorder(node.left)       # Visit left subtree
+        preorder(node.right)      # Visit right subtree
+
+# Example tree:
+#       1
+#      / \
+#     2   3
+#    / \
+#   4   5
+
+# Output: 1 2 4 5 3
+```
+
+### 3. Post-Order Traversal (Left → Right → Root)
+
+```python
+def postorder(node):
+    if node:
+        postorder(node.left)      # Visit left subtree
+        postorder(node.right)     # Visit right subtree
+        print(node.data, end=' ')  # Visit root
+
+# Example tree:
+#       1
+#      / \
+#     2   3
+#    / \
+#   4   5
+
+# Output: 4 5 2 3 1
+```
+
+***
+
+## Part 6: Complete Binary Tree Implementation
+
+```python
+class TreeNode:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+class BinaryTree:
+    def __init__(self):
+        self.root = None
+    
+    # Insert nodes (for demonstration)
+    def insert(self, data):
+        if self.root is None:
+            self.root = TreeNode(data)
+        else:
+            self._insert_recursive(self.root, data)
+    
+    def _insert_recursive(self, node, data):
+        if data < node.
+            if node.left is None:
+                node.left = TreeNode(data)
+            else:
+                self._insert_recursive(node.left, data)
+        else:
+            if node.right is None:
+                node.right = TreeNode(data)
+            else:
+                self._insert_recursive(node.right, data)
+    
+    # In-order traversal
+    def inorder(self, node=None):
+        if node is None:
+            node = self.root
+        if node:
+            self.inorder(node.left)
+            print(node.data, end=' ')
+            self.inorder(node.right)
+    
+    # Pre-order traversal
+    def preorder(self, node=None):
+        if node is None:
+            node = self.root
+        if node:
+            print(node.data, end=' ')
+            self.preorder(node.left)
+            self.preorder(node.right)
+    
+    # Post-order traversal
+    def postorder(self, node=None):
+        if node is None:
+            node = self.root
+        if node:
+            self.postorder(node.left)
+            self.postorder(node.right)
+            print(node.data, end=' ')
+    
+    # Search for a value
+    def search(self, data, node=None):
+        if node is None:
+            node = self.root
+        
+        if node is None:
+            return False
+        if node.data == 
+            return True
+        if data < node.
+            return self.search(data, node.left)
+        else:
+            return self.search(data, node.right)
+    
+    # Get height of tree
+    def height(self, node=None):
+        if node is None:
+            node = self.root
+        
+        if node is None:
+            return -1
+        
+        left_height = self.height(node.left)
+        right_height = self.height(node.right)
+        return max(left_height, right_height) + 1
+
+
+# ===== USING THE BINARY TREE =====
+
+tree = BinaryTree()
+
+# Insert elements
+print("Inserting elements: 50, 30, 70, 20, 40, 60, 80")
+tree.insert(50)
+tree.insert(30)
+tree.insert(70)
+tree.insert(20)
+tree.insert(40)
+tree.insert(60)
+tree.insert(80)
+
+# Tree structure:
+#        50
+#       /  \
+#     30    70
+#     / \   / \
+#   20  40 60 80
+
+print("\nIn-order traversal:")
+tree.inorder()  # Output: 20 30 40 50 60 70 80
+
+print("\n\nPre-order traversal:")
+tree.preorder()  # Output: 50 30 20 40 70 60 80
+
+print("\n\nPost-order traversal:")
+tree.postorder()  # Output: 20 40 30 60 80 70 50
+
+print("\n\nSearching for 40:", tree.search(40))  # True
+print("Searching for 100:", tree.search(100))  # False
+
+print("\nTree height:", tree.height())  # 2
+```
+
+***
+
+## Part 7: Real-World Tree Applications
+
+### Application 1: File System
+
+```python
+class FileNode:
+    def __init__(self, name, is_file=False):
+        self.name = name
+        self.is_file = is_file
+        self.children = []
+    
+    def add_child(self, child):
+        self.children.append(child)
+    
+    def display(self, level=0):
+        indent = "  " * level
+        print(f"{indent}{self.name}")
+        for child in self.children:
+            child.display(level + 1)
+
+# Create file system
+root = FileNode("C:")
+documents = FileNode("Documents")
+pictures = FileNode("Pictures")
+
+file1 = FileNode("resume.pdf", is_file=True)
+file2 = FileNode("photo.jpg", is_file=True)
+
+root.add_child(documents)
+root.add_child(pictures)
+documents.add_child(file1)
+pictures.add_child(file2)
+
+root.display()
+# Output:
+# C:
+#   Documents
+#     resume.pdf
+#   Pictures
+#     photo.jpg
+```
+
+### Application 2: Expression Tree
+
+```python
+# Expression: (3 + 5) * 2
+class ExpressionNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+# Build tree
+root = ExpressionNode('*')
+root.left = ExpressionNode('+')
+root.right = ExpressionNode(2)
+root.left.left = ExpressionNode(3)
+root.left.right = ExpressionNode(5)
+
+# Tree structure:
+#       *
+#      / \
+#     +   2
+#    / \
+#   3   5
+
+def evaluate(node):
+    if node.left is None and node.right is None:
+        return node.value
+    
+    left_val = evaluate(node.left)
+    right_val = evaluate(node.right)
+    
+    if node.value == '+':
+        return left_val + right_val
+    elif node.value == '*':
+        return left_val * right_val
+
+print(evaluate(root))  # Output: 16 (because (3+5)*2 = 16)
+```
+
+***
+
+## PART B: GRAPH DATA STRUCTURE
+
+## Part 8: What is a Graph?
+
+A **graph** is a collection of **nodes (vertices)** connected by **edges (links)**. Unlike trees, graphs can have cycles and any node can connect to any other node.
+
+**Key Difference from Trees**: 
+- Trees have hierarchy, one root, no cycles
+- Graphs have no hierarchy, no root, can have cycles
+
+### Real-World Analogies
+
+1. **Social Network**: People (nodes) connected by friendships (edges)
+2. **Road Map**: Cities (nodes) connected by roads (edges)
+3. **Flight Routes**: Airports (nodes) connected by flights (edges)
+4. **Internet**: Web pages (nodes) connected by links (edges)
+
+***
+
+## Part 9: Graph Terminology
+
+```
+    A --- B
+    |     |
+    |     |
+    C --- D
+```
+
+**Vertex (Node)**: Individual points (A, B, C, D)
+
+**Edge**: Connection between two vertices (A-B, A-C, B-D, C-D)
+
+**Adjacent**: Two vertices connected by an edge (A and B are adjacent)
+
+**Degree**: Number of edges connected to a vertex (A has degree 2)
+
+**Path**: Sequence of vertices connected by edges (A → B → D)
+
+**Cycle**: Path that starts and ends at the same vertex (A → B → D → C → A)
+
+**Connected Graph**: Every vertex has a path to every other vertex
+
+**Disconnected Graph**: Some vertices cannot reach others
+
+***
+
+## Part 10: Types of Graphs
+
+### Undirected Graph
+Edges have no direction (two-way).
+
+```
+    A --- B
+    |     |
+    C --- D
+
+A-B means you can go A→B or B→A
+```
+
+### Directed Graph (Digraph)
+Edges have direction (one-way).
+
+```
+    A → B
+    ↓   ↓
+    C → D
+
+A→B means you can only go from A to B
+```
+
+### Weighted Graph
+Edges have weights (costs, distances).
+
+```
+    A --5-- B
+    |       |
+    3       2
+    |       |
+    C --7-- D
+
+5, 3, 2, 7 are weights (e.g., distances in km)
+```
+
+***
+
+## Part 11: Graph Representation
+
+### Method 1: Adjacency List (Most Common)
+
+```python
+# Undirected graph
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D'],
+    'C': ['A', 'D'],
+    'D': ['B', 'C']
+}
+
+# Visual representation:
+#     A --- B
+#     |     |
+#     C --- D
+```
+
+### Method 2: Adjacency Matrix
+
+```python
+# 0 = no edge, 1 = edge exists
+#     A  B  C  D
+graph = [
+    [0, 1, 1, 0],  # A
+    [1, 0, 0, 1],  # B
+    [1, 0, 0, 1],  # C
+    [0, 1, 1, 0]   # D
+]
+```
+
+***
+
+## Part 12: Simple Graph Implementation
+
+```python
+class Graph:
+    def __init__(self):
+        self.graph = {}  # Adjacency list
+    
+    # Add a vertex
+    def add_vertex(self, vertex):
+        if vertex not in self.graph:
+            self.graph[vertex] = []
+            print(f"Added vertex: {vertex}")
+    
+    # Add an edge (undirected)
+    def add_edge(self, vertex1, vertex2):
+        if vertex1 in self.graph and vertex2 in self.graph:
+            self.graph[vertex1].append(vertex2)
+            self.graph[vertex2].append(vertex1)
+            print(f"Added edge: {vertex1} - {vertex2}")
+    
+    # Display graph
+    def display(self):
+        print("\nGraph structure:")
+        for vertex in self.graph:
+            print(f"{vertex}: {self.graph[vertex]}")
+    
+    # Get all neighbors of a vertex
+    def get_neighbors(self, vertex):
+        if vertex in self.graph:
+            return self.graph[vertex]
+        return []
+    
+    # Check if edge exists
+    def has_edge(self, vertex1, vertex2):
+        if vertex1 in self.graph:
+            return vertex2 in self.graph[vertex1]
+        return False
+
+
+# ===== USING THE GRAPH =====
+
+g = Graph()
+
+# Add vertices
+g.add_vertex('A')
+g.add_vertex('B')
+g.add_vertex('C')
+g.add_vertex('D')
+
+# Add edges
+g.add_edge('A', 'B')
+g.add_edge('A', 'C')
+g.add_edge('B', 'D')
+g.add_edge('C', 'D')
+
+# Display
+g.display()
+# Output:
+# A: ['B', 'C']
+# B: ['A', 'D']
+# C: ['A', 'D']
+# D: ['B', 'C']
+
+# Get neighbors
+print(f"\nNeighbors of A: {g.get_neighbors('A')}")  # ['B', 'C']
+
+# Check edge
+print(f"Edge A-B exists? {g.has_edge('A', 'B')}")  # True
+print(f"Edge A-D exists? {g.has_edge('A', 'D')}")  # False
+```
+
+***
+
+## Part 13: Graph Traversal Algorithms
+
+### Breadth-First Search (BFS)
+Explore all neighbors first, then their neighbors (level by level).
+
+```python
+from collections import deque
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    result = []
+    
+    while queue:
+        vertex = queue.popleft()
+        
+        if vertex not in visited:
+            visited.add(vertex)
+            result.append(vertex)
+            
+            # Add all unvisited neighbors to queue
+            for neighbor in graph[vertex]:
+                if neighbor not in visited:
+                    queue.append(neighbor)
+    
+    return result
+
+# Example usage
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+
+print("BFS from A:", bfs(graph, 'A'))
+# Output: ['A', 'B', 'C', 'D', 'E', 'F']
+# (visits level by level)
+```
+
+### Depth-First Search (DFS)
+Explore as far as possible, then backtrack.
+
+```python
+def dfs(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    
+    visited.add(start)
+    result = [start]
+    
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            result.extend(dfs(graph, neighbor, visited))
+    
+    return result
+
+# Example usage
+print("DFS from A:", dfs(graph, 'A'))
+# Output: ['A', 'B', 'D', 'E', 'F', 'C']
+# (goes deep first)
+```
+
+***
+
+## Part 14: Real-World Graph Applications
+
+### Application 1: Social Network
+
+```python
+class SocialNetwork:
+    def __init__(self):
+        self.network = {}
+    
+    def add_person(self, name):
+        if name not in self.network:
+            self.network[name] = []
+    
+    def add_friendship(self, person1, person2):
+        if person1 in self.network and person2 in self.network:
+            self.network[person1].append(person2)
+            self.network[person2].append(person1)
+    
+    def get_friends(self, person):
+        return self.network.get(person, [])
+    
+    def mutual_friends(self, person1, person2):
+        friends1 = set(self.network.get(person1, []))
+        friends2 = set(self.network.get(person2, []))
+        return list(friends1.intersection(friends2))
+
+# Use it
+social = SocialNetwork()
+social.add_person("Alice")
+social.add_person("Bob")
+social.add_person("Charlie")
+social.add_person("Diana")
+
+social.add_friendship("Alice", "Bob")
+social.add_friendship("Alice", "Charlie")
+social.add_friendship("Bob", "Charlie")
+social.add_friendship("Charlie", "Diana")
+
+print("Alice's friends:", social.get_friends("Alice"))  # ['Bob', 'Charlie']
+print("Mutual friends of Alice and Diana:", 
+      social.mutual_friends("Alice", "Diana"))  # ['Charlie']
+```
+
+### Application 2: Route Finder
+
+```python
+def find_path(graph, start, end, path=[]):
+    path = path + [start]
+    
+    if start == end:
+        return path
+    
+    if start not in graph:
+        return None
+    
+    for node in graph[start]:
+        if node not in path:
+            new_path = find_path(graph, node, end, path)
+            if new_path:
+                return new_path
+    
+    return None
+
+# City map
+city_map = {
+    'Home': ['Park', 'Mall'],
+    'Park': ['Home', 'School'],
+    'Mall': ['Home', 'Office'],
+    'School': ['Park', 'Office'],
+    'Office': ['Mall', 'School']
+}
+
+path = find_path(city_map, 'Home', 'Office')
+print("Path from Home to Office:", ' → '.join(path))
+# Output: Home → Mall → Office
+```
+
+***
+
+## Part 15: Tree vs Graph Comparison
+
+| Feature | Tree | Graph |
+|---------|------|-------|
+| **Structure** | Hierarchical | Network |
+| **Root** | Has one root | No specific root |
+| **Cycles** | No cycles allowed | Can have cycles |
+| **Edges** | N nodes = N-1 edges | Any number of edges |
+| **Parent-Child** | Each node has 1 parent | No parent-child concept |
+| **Connection** | Always connected | Can be disconnected |
+| **Example** | File system, family tree | Social network, maps |
+
+### Visual Comparison
+
+**Tree**:
+```
+     Root
+      |
+    /   \
+   A     B
+  / \     \
+ C   D     E
+
+- One root
+- Hierarchical
+- No cycles
+```
+
+**Graph**:
+```
+   A --- B
+   |  X  |
+   | / \ |
+   C --- D
+
+- No root
+- Any node can connect to any
+- Can have cycles (A→B→D→C→A)
+```
+
+***
+
+## Part 16: Key Points to Remember
+
+### Trees
+1. **Hierarchical structure** - Parent-child relationships
+2. **One root** - Starting point at top
+3. **No cycles** - Can't loop back
+4. **Connected** - All nodes reachable from root
+5. **Uses**: File systems, DOM, databases, decision trees
+6. **Traversal**: In-order, pre-order, post-order
+
+### Graphs
+1. **Network structure** - Nodes can connect to any node
+2. **No root** - No starting point
+3. **Can have cycles** - Loops allowed
+4. **Can be disconnected** - Some nodes unreachable
+5. **Uses**: Social networks, maps, routing, recommendations
+6. **Traversal**: BFS (breadth-first), DFS (depth-first)
+
+***
+
+## Part 17: Time Complexity Summary
+
+| Operation | Tree (BST) | Graph |
+|-----------|-----------|-------|
+| **Search** | O(log n) average | O(V + E) |
+| **Insert** | O(log n) average | O(1) add vertex, O(1) add edge |
+| **Delete** | O(log n) average | O(V) for vertex, O(E) for edge |
+| **Traversal** | O(n) | O(V + E) |
+
+V = number of vertices, E = number of edges
+
+***
+
+## Part 18: Practice Exercises
+
+### Tree Exercise
+1. Create a binary tree with values: 50, 30, 70, 20, 40, 60, 80
+2. Perform in-order, pre-order, and post-order traversals
+3. Search for value 40
+4. Find the height of the tree
+
+### Graph Exercise
+1. Create a graph representing 5 friends and their friendships
+2. Implement BFS to find all friends reachable from a starting person
+3. Find if there's a path between two people
+4. Count mutual friends between two people
+
+***
+
+
