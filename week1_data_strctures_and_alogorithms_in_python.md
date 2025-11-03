@@ -1120,4 +1120,694 @@ print(f"Students with A: {a_count}")  # 3
 
 ***
 
+-----------------------
 
+
+# STACK AND QUEUE - SUPER SIMPLE STUDY NOTES
+
+## PART A: STACK
+
+## Part 1: What is a Stack?
+
+A **stack** is a data structure where elements are arranged vertically, like a stack of plates. You can only add or remove items from the **top**.
+
+**Key Rule: LIFO (Last In, First Out)** - The last item you put in is the first one you take out.
+
+### Real-World Analogies
+
+1. **Stack of Plates**: You add plates on top and take plates from the top. You can't pull a plate from the middle or bottom.
+
+2. **Stack of Books**: The last book you place on the pile is the first one you'll pick up.
+
+3. **Undo Button**: The most recent action is the first one to be undone.
+
+4. **Browser Back Button**: The last page you visited is the first one you go back to.
+
+***
+
+## Part 2: Stack Operations
+
+### The Three Main Operations
+
+1. **Push** - Add an element to the top
+2. **Pop** - Remove and return the top element
+3. **Peek (or Top)** - Look at the top element without removing it
+
+### Visual Example
+
+```
+Initial Stack:        After Push(4):       After Pop():
+                      
+     [Empty]              [4] ← Top           [Empty]
+                          
+Push(1):              Push(5):             Push(6):
+     [1] ← Top            [5] ← Top           [6] ← Top
+                          [4]                 [4]
+Push(2):                  
+     [2] ← Top        Pop() returns 5:     Peek() returns 6:
+     [1]                  [4] ← Top           [6] ← Top
+                                              [4]
+Push(3):              
+     [3] ← Top
+     [2]
+     [1]
+```
+
+***
+
+## Part 3: Simple Stack Using Python List
+
+Python lists can act as stacks using `append()` and `pop()`:
+
+```python
+# Create an empty stack
+stack = []
+
+# Push elements (add to top)
+stack.append(10)    # Stack: [10]
+stack.append(20)    # Stack: [10, 20]
+stack.append(30)    # Stack: [10, 20, 30]
+
+print("Stack:", stack)  # [10, 20, 30]
+
+# Peek (look at top without removing)
+top = stack[-1]
+print("Top element:", top)  # 30
+
+# Pop elements (remove from top)
+removed = stack.pop()   # Returns 30, Stack: [10, 20]
+print("Removed:", removed)
+
+removed = stack.pop()   # Returns 20, Stack: [10]
+print("Removed:", removed)
+
+# Check if empty
+is_empty = len(stack) == 0
+print("Is empty?", is_empty)  # False
+
+# Get size
+size = len(stack)
+print("Size:", size)  # 1
+```
+
+***
+
+## Part 4: Building a Stack Class from Scratch
+
+```python
+class Stack:
+    def __init__(self):
+        self.items = []
+    
+    # Push - Add element to top
+    def push(self, item):
+        self.items.append(item)
+        print(f"Pushed {item}")
+    
+    # Pop - Remove and return top element
+    def pop(self):
+        if self.is_empty():
+            return "Stack is empty!"
+        return self.items.pop()
+    
+    # Peek - View top element without removing
+    def peek(self):
+        if self.is_empty():
+            return "Stack is empty!"
+        return self.items[-1]
+    
+    # Check if stack is empty
+    def is_empty(self):
+        return len(self.items) == 0
+    
+    # Get size of stack
+    def size(self):
+        return len(self.items)
+    
+    # Display stack
+    def display(self):
+        if self.is_empty():
+            print("Stack is empty")
+        else:
+            print("Stack (top to bottom):")
+            for i in range(len(self.items) - 1, -1, -1):
+                if i == len(self.items) - 1:
+                    print(f"  [{self.items[i]}] ← Top")
+                else:
+                    print(f"  [{self.items[i]}]")
+
+
+# ===== USING THE STACK =====
+
+# Create stack
+stack = Stack()
+
+# Push elements
+stack.push(10)
+stack.push(20)
+stack.push(30)
+stack.push(40)
+
+# Display
+stack.display()
+# Output:
+#   [40] ← Top
+#   [30]
+#   [20]
+#   [10]
+
+# Peek at top
+print(f"\nTop element: {stack.peek()}")  # 40
+
+# Pop elements
+print(f"\nPopped: {stack.pop()}")  # 40
+print(f"Popped: {stack.pop()}")    # 30
+
+# Display again
+stack.display()
+# Output:
+#   [20] ← Top
+#   [10]
+
+# Check size
+print(f"\nStack size: {stack.size()}")  # 2
+
+# Check if empty
+print(f"Is empty? {stack.is_empty()}")  # False
+```
+
+***
+
+## Part 5: Stack Time Complexity
+
+| Operation | Time Complexity |
+|-----------|----------------|
+| Push | O(1) - constant |
+| Pop | O(1) - constant |
+| Peek | O(1) - constant |
+| Search | O(n) - must check all |
+| Is Empty | O(1) - constant |
+
+All main operations are **super fast** O(1)!
+
+***
+
+## Part 6: Real-World Stack Applications
+
+### Application 1: Undo Mechanism
+
+```python
+class TextEditor:
+    def __init__(self):
+        self.text = ""
+        self.history = Stack()
+    
+    def type(self, new_text):
+        self.history.push(self.text)  # Save current state
+        self.text += new_text
+        print(f"Text: {self.text}")
+    
+    def undo(self):
+        if not self.history.is_empty():
+            self.text = self.history.pop()  # Restore previous state
+            print(f"After undo: {self.text}")
+        else:
+            print("Nothing to undo")
+
+# Use it
+editor = TextEditor()
+editor.type("Hello")       # Text: Hello
+editor.type(" World")      # Text: Hello World
+editor.type("!")           # Text: Hello World!
+editor.undo()              # After undo: Hello World
+editor.undo()              # After undo: Hello
+```
+
+### Application 2: Reversing a String
+
+```python
+def reverse_string(text):
+    stack = []
+    
+    # Push all characters
+    for char in text:
+        stack.append(char)
+    
+    # Pop all characters (LIFO gives reverse order)
+    reversed_text = ""
+    while stack:
+        reversed_text += stack.pop()
+    
+    return reversed_text
+
+print(reverse_string("hello"))  # Output: olleh
+```
+
+### Application 3: Balanced Parentheses Checker
+
+```python
+def is_balanced(expression):
+    stack = []
+    opening = "({["
+    closing = ")}]"
+    matches = {')': '(', '}': '{', ']': '['}
+    
+    for char in expression:
+        if char in opening:
+            stack.append(char)  # Push opening brackets
+        elif char in closing:
+            if not stack or stack[-1] != matches[char]:
+                return False
+            stack.pop()  # Pop matching opening bracket
+    
+    return len(stack) == 0  # Stack should be empty
+
+print(is_balanced("(a + b)"))        # True
+print(is_balanced("{[a + b]}"))      # True
+print(is_balanced("(a + b]"))        # False
+print(is_balanced("{a + b"))         # False
+```
+
+***
+
+## PART B: QUEUE
+
+## Part 7: What is a Queue?
+
+A **queue** is a data structure where elements are arranged in a line, like people waiting in line. You add items at the **back** and remove items from the **front**.
+
+**Key Rule: FIFO (First In, First Out)** - The first item you put in is the first one you take out.
+
+### Real-World Analogies
+
+1. **Line at a Store**: First person in line is the first to be served.
+
+2. **Print Queue**: First document sent to printer is printed first.
+
+3. **Call Center**: First caller in queue is the first to be answered.
+
+4. **Airport Security**: First person in line is the first to go through.
+
+***
+
+## Part 8: Queue Operations
+
+### The Three Main Operations
+
+1. **Enqueue (or Push)** - Add an element to the back (rear)
+2. **Dequeue (or Pop)** - Remove and return the front element
+3. **Peek (or Front)** - Look at the front element without removing it
+
+### Visual Example
+
+```
+Initial Queue:            After Enqueue(1):        After Enqueue(2):
+[Empty]                   Front → [1] ← Rear       Front → [1, 2] ← Rear
+
+After Enqueue(3):         After Dequeue():         After Enqueue(4):
+Front → [1, 2, 3] ← Rear  Front → [2, 3] ← Rear   Front → [2, 3, 4] ← Rear
+                          (removed 1)
+
+Step-by-step visualization:
+
+Enqueue(10):  Front → [10] ← Rear
+Enqueue(20):  Front → [10, 20] ← Rear
+Enqueue(30):  Front → [10, 20, 30] ← Rear
+Dequeue():    Front → [20, 30] ← Rear (removed 10)
+Peek():       Returns 20 (doesn't remove)
+```
+
+***
+
+## Part 9: Simple Queue Using Python List
+
+```python
+# Create an empty queue
+queue = []
+
+# Enqueue (add to back)
+queue.append(10)     # Queue: [10]
+queue.append(20)     # Queue: [10, 20]
+queue.append(30)     # Queue: [10, 20, 30]
+
+print("Queue:", queue)  # [10, 20, 30]
+
+# Peek at front
+front = queue[0]
+print("Front element:", front)  # 10
+
+# Dequeue (remove from front)
+removed = queue.pop(0)   # Returns 10, Queue: [20, 30]
+print("Removed:", removed)
+
+removed = queue.pop(0)   # Returns 20, Queue: [30]
+print("Removed:", removed)
+
+# Check if empty
+is_empty = len(queue) == 0
+print("Is empty?", is_empty)  # False
+
+# Get size
+size = len(queue)
+print("Size:", size)  # 1
+```
+
+***
+
+## Part 10: Building a Queue Class from Scratch
+
+```python
+class Queue:
+    def __init__(self):
+        self.items = []
+    
+    # Enqueue - Add element to rear
+    def enqueue(self, item):
+        self.items.append(item)
+        print(f"Enqueued {item}")
+    
+    # Dequeue - Remove and return front element
+    def dequeue(self):
+        if self.is_empty():
+            return "Queue is empty!"
+        return self.items.pop(0)
+    
+    # Peek - View front element without removing
+    def peek(self):
+        if self.is_empty():
+            return "Queue is empty!"
+        return self.items[0]
+    
+    # Check if queue is empty
+    def is_empty(self):
+        return len(self.items) == 0
+    
+    # Get size of queue
+    def size(self):
+        return len(self.items)
+    
+    # Display queue
+    def display(self):
+        if self.is_empty():
+            print("Queue is empty")
+        else:
+            print("Queue (front to rear):")
+            print(f"  Front → {self.items} ← Rear")
+
+
+# ===== USING THE QUEUE =====
+
+# Create queue
+queue = Queue()
+
+# Enqueue elements
+queue.enqueue(10)
+queue.enqueue(20)
+queue.enqueue(30)
+queue.enqueue(40)
+
+# Display
+queue.display()
+# Output: Front → [10, 20, 30, 40] ← Rear
+
+# Peek at front
+print(f"\nFront element: {queue.peek()}")  # 10
+
+# Dequeue elements
+print(f"\nDequeued: {queue.dequeue()}")  # 10
+print(f"Dequeued: {queue.dequeue()}")    # 20
+
+# Display again
+queue.display()
+# Output: Front → [30, 40] ← Rear
+
+# Check size
+print(f"\nQueue size: {queue.size()}")  # 2
+
+# Check if empty
+print(f"Is empty? {queue.is_empty()}")  # False
+```
+
+***
+
+## Part 11: Queue Time Complexity
+
+| Operation | Time Complexity |
+|-----------|----------------|
+| Enqueue | O(1) - constant |
+| Dequeue | O(n) - must shift all elements |
+| Peek | O(1) - constant |
+| Search | O(n) - must check all |
+| Is Empty | O(1) - constant |
+
+**Note**: Dequeue is O(n) with simple list implementation because all elements must shift left. Better implementations use circular queues or deque.
+
+***
+
+## Part 12: Better Queue Using `collections.deque`
+
+Python's `collections.deque` (double-ended queue) is optimized for fast operations at both ends:
+
+```python
+from collections import deque
+
+# Create queue
+queue = deque()
+
+# Enqueue - O(1)
+queue.append(10)
+queue.append(20)
+queue.append(30)
+
+print("Queue:", list(queue))  # [10, 20, 30]
+
+# Dequeue - O(1) with deque!
+removed = queue.popleft()  # Returns 10
+print("Dequeued:", removed)
+
+# Peek
+front = queue[0]
+print("Front:", front)  # 20
+
+# Size
+print("Size:", len(queue))  # 2
+```
+
+***
+
+## Part 13: Real-World Queue Applications
+
+### Application 1: Print Queue
+
+```python
+class PrintQueue:
+    def __init__(self):
+        self.queue = Queue()
+    
+    def add_document(self, doc_name):
+        self.queue.enqueue(doc_name)
+        print(f"Added '{doc_name}' to print queue")
+    
+    def print_next(self):
+        if not self.queue.is_empty():
+            doc = self.queue.dequeue()
+            print(f"Printing: {doc}")
+        else:
+            print("No documents to print")
+    
+    def show_queue(self):
+        self.queue.display()
+
+# Use it
+printer = PrintQueue()
+printer.add_document("Report.pdf")
+printer.add_document("Invoice.pdf")
+printer.add_document("Letter.pdf")
+printer.show_queue()
+# Output: Front → ['Report.pdf', 'Invoice.pdf', 'Letter.pdf'] ← Rear
+
+printer.print_next()  # Printing: Report.pdf
+printer.print_next()  # Printing: Invoice.pdf
+```
+
+### Application 2: Customer Service Queue
+
+```python
+class CustomerService:
+    def __init__(self):
+        self.queue = []
+    
+    def add_customer(self, name):
+        self.queue.append(name)
+        position = len(self.queue)
+        print(f"{name} joined the queue. Position: {position}")
+    
+    def serve_next(self):
+        if self.queue:
+            customer = self.queue.pop(0)
+            print(f"Now serving: {customer}")
+            print(f"Customers waiting: {len(self.queue)}")
+        else:
+            print("No customers waiting")
+    
+    def show_queue(self):
+        if self.queue:
+            print(f"Waiting: {', '.join(self.queue)}")
+        else:
+            print("Queue is empty")
+
+# Use it
+service = CustomerService()
+service.add_customer("Alice")   # Position: 1
+service.add_customer("Bob")     # Position: 2
+service.add_customer("Charlie") # Position: 3
+service.show_queue()            # Waiting: Alice, Bob, Charlie
+service.serve_next()            # Now serving: Alice
+service.serve_next()            # Now serving: Bob
+```
+
+***
+
+## Part 14: Stack vs Queue Comparison
+
+| Aspect | Stack | Queue |
+|--------|-------|-------|
+| **Principle** | LIFO (Last In, First Out) | FIFO (First In, First Out) |
+| **Add Location** | Top | Rear (back) |
+| **Remove Location** | Top | Front |
+| **Analogy** | Stack of plates | Line at a store |
+| **Operations** | Push, Pop, Peek | Enqueue, Dequeue, Peek |
+| **Use Cases** | Undo, function calls, backtracking | Task scheduling, print queue |
+
+### Visual Comparison
+
+**Stack (LIFO)**:
+```
+Push 1:    [1]
+Push 2:    [2, 1]
+Push 3:    [3, 2, 1]
+Pop:       [2, 1]  (removed 3 - last in)
+```
+
+**Queue (FIFO)**:
+```
+Enqueue 1:  [1]
+Enqueue 2:  [1, 2]
+Enqueue 3:  [1, 2, 3]
+Dequeue:    [2, 3]  (removed 1 - first in)
+```
+
+***
+
+## Part 15: Complete Working Examples
+
+### Example 1: Browser History (Stack)
+
+```python
+class BrowserHistory:
+    def __init__(self):
+        self.history = []
+        self.current = "Homepage"
+    
+    def visit(self, url):
+        self.history.append(self.current)
+        self.current = url
+        print(f"Visited: {url}")
+    
+    def back(self):
+        if self.history:
+            previous = self.history.pop()
+            print(f"Going back from {self.current} to {previous}")
+            self.current = previous
+        else:
+            print("No previous page")
+    
+    def show_current(self):
+        print(f"Current page: {self.current}")
+
+# Use it
+browser = BrowserHistory()
+browser.visit("google.com")
+browser.visit("github.com")
+browser.visit("stackoverflow.com")
+browser.show_current()  # stackoverflow.com
+browser.back()          # Back to github.com
+browser.back()          # Back to google.com
+browser.show_current()  # google.com
+```
+
+### Example 2: Task Scheduler (Queue)
+
+```python
+class TaskScheduler:
+    def __init__(self):
+        self.tasks = []
+    
+    def add_task(self, task):
+        self.tasks.append(task)
+        print(f"Task added: {task}")
+    
+    def execute_next(self):
+        if self.tasks:
+            task = self.tasks.pop(0)
+            print(f"Executing: {task}")
+        else:
+            print("No tasks to execute")
+    
+    def show_tasks(self):
+        if self.tasks:
+            print(f"Pending tasks: {', '.join(self.tasks)}")
+        else:
+            print("No pending tasks")
+
+# Use it
+scheduler = TaskScheduler()
+scheduler.add_task("Send email")
+scheduler.add_task("Update database")
+scheduler.add_task("Generate report")
+scheduler.show_tasks()      # Pending: Send email, Update database, Generate report
+scheduler.execute_next()    # Executing: Send email
+scheduler.execute_next()    # Executing: Update database
+scheduler.show_tasks()      # Pending: Generate report
+```
+
+***
+
+## Part 16: Key Points to Remember
+
+### Stack (LIFO)
+1. **Last In, First Out** - Like a stack of plates
+2. **Operations**: Push (add), Pop (remove), Peek (view)
+3. **Time**: O(1) for all main operations
+4. **Uses**: Undo, function calls, backtracking, expression evaluation
+5. **Think**: "Stack of books on a desk"
+
+### Queue (FIFO)
+1. **First In, First Out** - Like a line at a store
+2. **Operations**: Enqueue (add), Dequeue (remove), Peek (view)
+3. **Time**: O(1) for enqueue, O(n) for dequeue (with list), O(1) with deque
+4. **Uses**: Task scheduling, print jobs, breadth-first search
+5. **Think**: "People waiting in line"
+
+***
+
+## Part 17: Practice Exercises
+
+### Exercise 1: Stack Practice
+Create a stack and:
+1. Push the numbers 1, 2, 3, 4, 5
+2. Pop two elements
+3. Push 6 and 7
+4. Display the final stack
+
+### Exercise 2: Queue Practice
+Create a queue and:
+1. Enqueue "A", "B", "C", "D"
+2. Dequeue one element
+3. Enqueue "E"
+4. Display the final queue
+
+### Exercise 3: Challenge
+Write a function that uses a stack to check if a string is a palindrome (reads the same forwards and backwards).
+
+***
