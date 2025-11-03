@@ -143,7 +143,7 @@ Arrays are excellent for **fast lookups** - accessing an element by index takes 
 ------
 
 
-# LINKED LIST 
+# LINKED LIST - Super Simple Study Notes
 
 ## Part 1: The Basic Concept
 
@@ -587,3 +587,17 @@ Use the complete code from Part 7 as reference!
 
 ***
 
+**Save these notes!** Understanding linked lists is fundamental for learning stacks, queues, trees, and graphs later[2].
+
+Sources
+[1] DSA Linked Lists - W3Schools https://www.w3schools.com/dsa/dsa_theory_linkedlists.php
+[2] Introduction to Linked List https://www.geeksforgeeks.org/dsa/introduction-to-linked-list-data-structure/
+[3] How Does a Linked List Work? A Beginner's Guide to ... https://www.freecodecamp.org/news/how-linked-lists-work/
+[4] Python Linked Lists: Tutorial With Examples https://www.datacamp.com/tutorial/python-linked-lists
+[5] DSA Linked Lists Operations https://www.w3schools.com/dsa/dsa_algo_linkedlists_operations.php
+[6] Learn Linked Lists in 13 minutes 🔗 https://www.youtube.com/watch?v=N6dOwBde7-M
+[7] Linked List Data Structure - Programiz https://www.programiz.com/dsa/linked-list
+[8] Linked lists - Learn C - Free Interactive C Tutorial https://www.learn-c.org/en/Linked_lists
+[9] Linked list https://en.wikipedia.org/wiki/Linked_list
+[10] Linked List Data Structure - GeeksforGeeks https://www.geeksforgeeks.org/dsa/linked-list-data-structure/
+[11] Big O Notation: Time Complexity & Examples Explained https://www.simplilearn.com/big-o-notation-in-data-structure-article
