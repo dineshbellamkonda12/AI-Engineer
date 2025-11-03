@@ -142,3 +142,264 @@ Arrays are excellent for **fast lookups** - accessing an element by index takes 
 
 ------
 
+
+# Linked List - Complete Study Notes
+
+## What is a Linked List?
+
+A **linked list** is a way to store data where each piece of information (called a **node**) contains two parts[1][2]:
+1. The actual data you want to store
+2. A pointer (address) that tells you where the next piece of data is located
+
+Think of it like a **scavenger hunt**[2]: Each clue has information AND tells you where to find the next clue. The clues can be anywhere in the city - they don't need to be next to each other[2].
+
+## Visual Comparison: Array vs Linked List
+
+### Array Structure
+```
+Memory Address:  100   101   102   103   104
+Array:          [10] [20] [30] [40] [50]
+                  ↑
+                Index 0, 1, 2, 3, 4
+```
+**Key Point**: All elements sit **side-by-side** in memory[3][4]. Like parked cars in a parking lot - all in a row[4].
+
+### Linked List Structure
+```
+Memory Address:  100         305         150         420
+Linked List:    [10|305] → [20|150] → [30|420] → [40|NULL]
+                 data next   data next   data next   data next
+                   ↑
+                 HEAD
+```
+**Key Point**: Elements can be **anywhere** in memory[3][2]. Each node stores the address of the next node[2]. Like treasure hunt clues scattered across town[2].
+
+## Major Differences: Array vs Linked List
+
+| Feature | Array | Linked List |
+|---------|-------|-------------|
+| **Memory Storage** | Contiguous (side-by-side)[3][4] | Non-contiguous (scattered)[3][4] |
+| **Size** | Fixed size[4][5] | Dynamic (can grow/shrink)[4][5] |
+| **Memory Allocation** | Compile time (when program starts)[4][5] | Runtime (as needed)[4][5] |
+| **Accessing Elements** | Fast O(1) - direct index access[3][5] | Slow O(n) - must traverse from head[3][5] |
+| **Insertion at Beginning** | Slow O(n) - shift all elements[3][5] | Fast O(1) - just update pointers[3][5] |
+| **Deletion** | Slow O(n) - shift elements[3][5] | Fast O(1) - update pointers[3][5] |
+| **Memory Required** | Less (just data)[4][5] | More (data + pointers)[4][5] |
+| **Best For** | Random access, known size | Frequent insertions/deletions[3] |
+
+## Complete Python Code Examples
+
+### Array (List) Implementation
+
+```python
+# Creating an array
+fruits = ['apple', 'banana', 'cherry', 'date']
+
+# Accessing elements - FAST O(1)
+print(fruits[0])      # Output: apple
+print(fruits[2])      # Output: cherry
+
+# Inserting at beginning - SLOW O(n)
+# All elements must shift right
+fruits.insert(0, 'mango')  
+# Result: ['mango', 'apple', 'banana', 'cherry', 'date']
+
+# Deleting from middle - SLOW O(n)
+# All elements after must shift left
+fruits.pop(2)  # Removes 'banana'
+# Result: ['mango', 'apple', 'cherry', 'date']
+
+# Memory visualization
+# fruits: [100][101][102][103] - all side by side
+```
+
+### Linked List Implementation
+
+```python
+# Step 1: Define Node class
+class Node:
+    def __init__(self, data):
+        self.data = data      # Stores the actual value
+        self.next = None      # Pointer to next node (initially None)
+
+# Step 2: Define LinkedList class
+class LinkedList:
+    def __init__(self):
+        self.head = None      # First node (initially empty)
+    
+    # Insert at beginning - FAST O(1)
+    def insert_at_beginning(self, new_data):
+        # Create new node
+        new_node = Node(new_data)
+        
+        # Make new node point to current head
+        new_node.next = self.head
+        
+        # Make new node the new head
+        self.head = new_node
+    
+    # Insert at end - SLOW O(n) because we must traverse
+    def insert_at_end(self, new_data):
+        new_node = Node(new_data)
+        
+        # If list is empty, make new node the head
+        if self.head is None:
+            self.head = new_node
+            return
+        
+        # Traverse to the last node
+        last = self.head
+        while last.next:
+            last = last.next
+        
+        # Make last node point to new node
+        last.next = new_node
+    
+    # Delete a node - O(n) because we must find it
+    def delete_node(self, key):
+        # Store head node
+        temp = self.head
+        
+        # If head contains the key
+        if temp and temp.data == key:
+            self.head = temp.next
+            temp = None
+            return
+        
+        # Search for the key
+        prev = None
+        while temp and temp.data != key:
+            prev = temp
+            temp = temp.next
+        
+        # If key not found
+        if temp is None:
+            return
+        
+        # Unlink the node
+        prev.next = temp.next
+        temp = None
+    
+    # Search for element - SLOW O(n)
+    def search(self, key):
+        current = self.head
+        
+        while current:
+            if current.data == key:
+                return True
+            current = current.next
+        
+        return False
+    
+    # Print the linked list
+    def print_list(self):
+        current = self.head
+        while current:
+            print(current.data, end=' -> ')
+            current = current.next
+        print('None')
+    
+    # Get length of list
+    def get_length(self):
+        count = 0
+        current = self.head
+        while current:
+            count += 1
+            current = current.next
+        return count
+
+# Using the Linked List
+ll = LinkedList()
+
+# Insert elements
+ll.insert_at_beginning('cherry')
+ll.insert_at_beginning('banana')
+ll.insert_at_beginning('apple')
+
+print("Initial list:")
+ll.print_list()  
+# Output: apple -> banana -> cherry -> None
+
+# Insert at end
+ll.insert_at_end('date')
+print("\nAfter inserting at end:")
+ll.print_list()  
+# Output: apple -> banana -> cherry -> date -> None
+
+# Search
+print("\nSearching for 'banana':", ll.search('banana'))  # True
+print("Searching for 'mango':", ll.search('mango'))    # False
+
+# Delete
+ll.delete_node('banana')
+print("\nAfter deleting 'banana':")
+ll.print_list()  
+# Output: apple -> cherry -> date -> None
+
+# Get length
+print("\nLength of list:", ll.get_length())  # 3
+```
+
+## Why Insertion/Deletion is Faster in Linked Lists
+
+### Array Insertion Example
+```python
+# Array: [10, 20, 30, 40, 50]
+# Insert 15 at position 1
+
+# Step 1: Shift 20 → position 2
+# Step 2: Shift 30 → position 3
+# Step 3: Shift 40 → position 4
+# Step 4: Shift 50 → position 5
+# Step 5: Insert 15 at position 1
+# Result: [10, 15, 20, 30, 40, 50]
+# Time: O(n) - must shift n elements
+```
+
+### Linked List Insertion Example
+```python
+# Linked List: 10 → 20 → 30 → 40 → 50
+# Insert 15 between 10 and 20
+
+# Step 1: Create new node with data 15
+# Step 2: Make 15 point to 20
+# Step 3: Make 10 point to 15
+# Result: 10 → 15 → 20 → 30 → 40 → 50
+# Time: O(1) - just change 2 pointers (if you have the position)
+```
+
+## Real-World Analogy
+
+**Array = Apartment Building**
+- All rooms are numbered and in order
+- Easy to find room 304 - just go to floor 3
+- But if you want to add a room between 304 and 305, you must renumber ALL rooms after it
+
+**Linked List = Treasure Hunt**
+- Each clue can be anywhere in the city
+- Each clue tells you where the next one is
+- To find the 5th clue, you must start at clue 1 and follow the chain
+- But adding a new clue between clue 2 and 3 is easy - just change where clue 2 points
+
+## When to Use Each
+
+### Use Array When:
+- You know the size in advance[3][5]
+- You need fast access to elements by index[3]
+- You access elements randomly (e.g., `list[11]`, `list`)[5]
+- Memory is limited (arrays use less memory)[4]
+
+### Use Linked List When:
+- Size changes frequently[3][5]
+- You insert/delete elements often, especially at the beginning[3]
+- You don't know the size in advance[3]
+- You access elements sequentially (one after another)[5]
+- Implementing stacks, queues, or other dynamic structures[3]
+
+## Key Takeaways
+
+1. **Arrays**: Think "numbered parking spots" - everything in order, easy to find, hard to rearrange[4]
+2. **Linked Lists**: Think "treasure hunt" - pieces anywhere, must follow clues, easy to add/remove clues[2]
+3. **Trade-off**: Arrays = fast access, slow modification. Linked Lists = slow access, fast modification[3][5]
+4. **Memory**: Arrays store just data. Linked Lists store data + pointers (more memory)[4]
+
