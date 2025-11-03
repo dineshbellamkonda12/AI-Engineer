@@ -143,7 +143,7 @@ Arrays are excellent for **fast lookups** - accessing an element by index takes 
 ------
 
 
-# LINKED LIST - Super Simple Study Notes
+# LINKED LIST 
 
 ## Part 1: The Basic Concept
 
